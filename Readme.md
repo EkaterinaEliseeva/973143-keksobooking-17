@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Катя Елисеева](https://up.htmlacademy.ru/javascript/17/user/973143).
-* Наставник: `Неизвестно`.
+* Наставник: [Катя Елисеева](https://htmlacademy.ru/profile/id568747).
 
 ---
 
