@@ -10,7 +10,7 @@ var minX = 0;
 var maxX = mapPins.getBoundingClientRect().width;
 
 var offers = ['palace', 'flat', 'house', 'bungalo'];
-var arr = [];
+var pins = [];
 
 // генерация рандомного числа в промежутке
 var generateIntInGap = function (min, max) {
@@ -18,8 +18,8 @@ var generateIntInGap = function (min, max) {
 };
 
 // ф-я создания объекта
-var makeElement = function (x, typeHousing) {
-  var elem = {
+var createUser = function (x, typeHousing) {
+  return {
     'author': {
       'avatar': 'img/avatars/user0' + x + '.png'
     },
@@ -31,12 +31,11 @@ var makeElement = function (x, typeHousing) {
       'y': generateIntInGap(130 + PIN_HEIGHT, 670)
     }
   };
-  return elem;
 };
 
 // генерация 8 объектов
 for (var i = 0; i < 8; i++) {
-  arr[i] = makeElement(i + 1, offers[generateIntInGap(0, offers.length - 1)]);
+  pins[i] = createUser(i + 1, offers[generateIntInGap(0, offers.length - 1)]);
 }
 
 // удаление класса map--faded
@@ -44,20 +43,20 @@ map.classList.remove('map--faded');
 
 
 // присваивание метке значений элемента массива
-var renderPin = function (obj) {
+var renderPin = function (pinsElement) {
   var pinElem = pin.cloneNode(true);
 
-  pinElem.style.left = obj.location.x - PIN_WIDTH / 2 + 'px';
-  pinElem.style.top = obj.location.y - PIN_HEIGHT + 'px';
-  pinElem.querySelector('img').src = obj.author.avatar;
-  pinElem.querySelector('img').alt = obj.offer.type;
+  pinElem.style.left = pinsElement.location.x - PIN_WIDTH / 2 + 'px';
+  pinElem.style.top = pinsElement.location.y - PIN_HEIGHT + 'px';
+  pinElem.querySelector('img').setAttribute('src', pinsElement.author.avatar);
+  pinElem.querySelector('img').setAttribute('alt', pinsElement.offer.type);
 
   return pinElem;
 };
 
 // добавление меток на карту
 var fragment = document.createDocumentFragment();
-for (i = 0; i < arr.length; i++) {
-  fragment.appendChild(renderPin(arr[i]));
+for (i = 0; i < pins.length; i++) {
+  fragment.appendChild(renderPin(pins[i]));
 }
 mapPins.appendChild(fragment);
