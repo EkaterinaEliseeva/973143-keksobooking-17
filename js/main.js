@@ -10,7 +10,7 @@ var minX = 0;
 var maxX = mapPins.getBoundingClientRect().width;
 
 var offers = ['palace', 'flat', 'house', 'bungalo'];
-var pins = [];
+
 
 // генерация рандомного числа в промежутке
 var generateIntInGap = function (min, max) {
@@ -33,14 +33,18 @@ var createUser = function (x, typeHousing) {
   };
 };
 
-// генерация 8 объектов
-for (var i = 0; i < 8; i++) {
-  pins[i] = createUser(i + 1, offers[generateIntInGap(0, offers.length - 1)]);
-}
+var createUsers = function () {
+  var pins = [];
+  for (var i = 0; i < 8; i++) {
+    pins[i] = createUser(i + 1, offers[generateIntInGap(0, offers.length - 1)]);
+  }
+  return pins;
+};
+
+var pins = createUsers();
 
 // удаление класса map--faded
 map.classList.remove('map--faded');
-
 
 // присваивание метке значений элемента массива
 var renderPin = function (pinsElement) {
@@ -56,7 +60,7 @@ var renderPin = function (pinsElement) {
 
 // добавление меток на карту
 var fragment = document.createDocumentFragment();
-for (i = 0; i < pins.length; i++) {
+for (var i = 0; i < pins.length; i++) {
   fragment.appendChild(renderPin(pins[i]));
 }
 mapPins.appendChild(fragment);
