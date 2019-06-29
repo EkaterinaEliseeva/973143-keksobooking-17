@@ -6,6 +6,11 @@ var mapPins = document.querySelector('.map__pins');
 var map = document.querySelector('.map');
 var pin = document.querySelector('#pin').content.querySelector('.map__pin');
 
+var typeOffer = document.querySelector('#type');
+var pricePerNight = document.querySelector('#price');
+var timeIn = document.querySelector('#timein');
+var timeOut = document.querySelector('#timeout');
+
 var minX = 0;
 var maxX = mapPins.getBoundingClientRect().width;
 
@@ -64,3 +69,30 @@ for (var i = 0; i < pins.length; i++) {
   fragment.appendChild(renderPin(pins[i]));
 }
 mapPins.appendChild(fragment);
+
+// установка минимальных значений цены за ночь, в зависимости от типа жилья
+var setMinPrice = function () {
+  if (typeOffer.value === 'bungalo') {
+    pricePerNight.setAttribute('min', '0');
+    pricePerNight.setAttribute('placeholder', '0');
+  } else if (typeOffer.value === 'flat') {
+    pricePerNight.setAttribute('min', '1000');
+    pricePerNight.setAttribute('placeholder', '1000');
+  } else if (typeOffer.value === 'house') {
+    pricePerNight.setAttribute('min', '5000');
+    pricePerNight.setAttribute('placeholder', '5000');
+  } else {
+    pricePerNight.setAttribute('min', '10000');
+    pricePerNight.setAttribute('placeholder', '10000');
+  }
+};
+
+typeOffer.addEventListener('change', setMinPrice);
+
+// синхронизация времени заезда и выезда
+var synchronizeTime = function () {
+  timeOut.selectedIndex = timeIn.selectedIndex;
+};
+
+timeIn.addEventListener('change', synchronizeTime);
+
