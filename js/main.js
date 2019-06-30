@@ -7,15 +7,22 @@ var map = document.querySelector('.map');
 var pin = document.querySelector('#pin').content.querySelector('.map__pin');
 
 var typeOffer = document.querySelector('#type');
-var pricePerNight = document.querySelector('#price');
+var titleInput = document.querySelector('#title');
+var priceInput = document.querySelector('#price');
 var timeIn = document.querySelector('#timein');
 var timeOut = document.querySelector('#timeout');
+var submitAdButton = document.querySelector('.ad-form__submit');
 
 var minX = 0;
 var maxX = mapPins.getBoundingClientRect().width;
 
 var offers = ['palace', 'flat', 'house', 'bungalo'];
-
+var minPrice = {
+  BUNGALO: 0,
+  FLAT: 1000,
+  HOUSE: 5000,
+  PALACE: 10000
+};
 
 // генерация рандомного числа в промежутке
 var generateIntInGap = function (min, max) {
@@ -70,24 +77,21 @@ for (var i = 0; i < pins.length; i++) {
 }
 mapPins.appendChild(fragment);
 
-// установка минимальных значений цены за ночь, в зависимости от типа жилья
-var setMinPrice = function () {
-  if (typeOffer.value === 'bungalo') {
-    pricePerNight.setAttribute('min', '0');
-    pricePerNight.setAttribute('placeholder', '0');
-  } else if (typeOffer.value === 'flat') {
-    pricePerNight.setAttribute('min', '1000');
-    pricePerNight.setAttribute('placeholder', '1000');
-  } else if (typeOffer.value === 'house') {
-    pricePerNight.setAttribute('min', '5000');
-    pricePerNight.setAttribute('placeholder', '5000');
-  } else {
-    pricePerNight.setAttribute('min', '10000');
-    pricePerNight.setAttribute('placeholder', '10000');
-  }
+// валидация заголовка объявления
+var validateTitle = function () {
+  return (titleInput.value.length >= 30) & (titleInput.value.length <= 100) ? true : false;
 };
 
-typeOffer.addEventListener('change', setMinPrice);
+// валидация цены
+var validatePrice = function () {
+  return (Number(priceInput.value) >= Number(priceInput.min)) & (Number(priceInput.value) <= 1000000) ? true : false;
+};
+
+// установка минимальных значений цены за ночь, в зависимости от типа жилья
+typeOffer.addEventListener('change', function () {
+  priceInput.min = minPrice[typeOffer.value.toUpperCase()];
+  priceInput.placeholder = minPrice[typeOffer.value.toUpperCase()];
+});
 
 // синхронизация времени заезда и выезда
 var synchronizeTime = function () {
@@ -96,3 +100,15 @@ var synchronizeTime = function () {
 
 timeIn.addEventListener('change', synchronizeTime);
 
+// валидация формы
+var validateForm = function () {
+  return validateTitle() & validatePrice() ? true : false;
+};
+
+// проверка и отправка формы кнопкой "опубликовать"
+submitAdButton.addEventListener('submit', function (evt) {
+  evt.preventDefault();
+  if (validateForm()) {
+    // отправка формы
+  }
+});
