@@ -16,6 +16,8 @@ var titleInput = document.querySelector('#title');
 var priceInput = document.querySelector('#price');
 var timeIn = document.querySelector('#timein');
 var timeOut = document.querySelector('#timeout');
+var roomNumber = document.querySelector('#room_number');
+var capacity = document.querySelector('#capacity');
 var submitAdButton = document.querySelector('.ad-form__submit');
 
 var minX = 0;
@@ -27,6 +29,13 @@ var minPrice = {
   FLAT: 1000,
   HOUSE: 5000,
   PALACE: 10000
+};
+
+var optionsRoom = {
+  1: [1],
+  2: [1, 2],
+  3: [1, 2, 3],
+  100: [0]
 };
 
 // генерация рандомного числа в промежутке
@@ -116,26 +125,26 @@ var setStartAddress = function () {
   addressInput.value = x + ', ' + y;
 };
 
-setStartAddress();
-disableFormAd();
-disableFormFilter();
-
-pinMain.addEventListener('click', function () {
-  activateFormAd();
-  activateFormFilter();
-  map.classList.remove('map--faded');
-  adForm.classList.remove('ad-form--disabled');
-  addTagsToMap();
-});
-
 // валидация заголовка объявления
 var validateTitle = function () {
-  return (titleInput.value.length >= 30) & (titleInput.value.length <= 100) ? true : false;
+  var isValid = titleInput.value.length >= 30 && titleInput.value.length <= 100;
+  if (isValid) {
+    return true;
+  }
+  titleInput.setCustomValidity('Введите заголовок длиной от 30 до 100 символов');
+  titleInput.focus();
+  return false;
 };
 
 // валидация цены
 var validatePrice = function () {
-  return (Number(priceInput.value) >= Number(priceInput.min)) & (Number(priceInput.value) <= 1000000) ? true : false;
+  var isValid = Number(priceInput.value) >= Number(priceInput.min) && Number(priceInput.value) <= 1000000;
+  if (isValid) {
+    return true;
+  }
+  priceInput.setCustomValidity('Введите число от ' + priceInput.min + ' до 1000000');
+  priceInput.focus();
+  return false;
 };
 
 // установка минимальных значений цены за ночь, в зависимости от типа жилья
@@ -145,21 +154,66 @@ typeOffer.addEventListener('change', function () {
 });
 
 // синхронизация времени заезда и выезда
-var synchronizeTime = function () {
-  timeOut.selectedIndex = timeIn.selectedIndex;
+var synchronizeTime = function (evt) {
+  if (evt.target === timeIn) {
+    timeOut.selectedIndex = timeIn.selectedIndex;
+  } else {
+    timeIn.selectedIndex = timeOut.selectedIndex;
+  }
 };
 
 timeIn.addEventListener('change', synchronizeTime);
+timeOut.addEventListener('change', synchronizeTime);
+
+// изменение вместимости в зависимости от кол-ва комнат
+var changeCapacity = function () {
+  // варианты вместимости
+  var optionsCapacity = capacity.options;
+  // отключение всех
+  for (var i = 0; i < capacity.options.length; i++) {
+    optionsCapacity[i].setAttribute('disabled', 'disabled');
+    if (optionsCapacity[i].selected) {
+      optionsCapacity[i].selected = false;
+    }
+  }
+  // подходящие варианты для определенной roomNumber
+  var suitableOptions = optionsRoom[roomNumber.value];
+
+  // мне это не нравится, но пока не пойму как сделать
+  for (var j = 0; j < suitableOptions.length; j++) {
+    for (i = 0; i < optionsCapacity.length; i++) {
+      if (suitableOptions[j] === Number(optionsCapacity[i].value)) {
+        optionsCapacity[i].removeAttribute('disabled', 'disabled');
+        optionsCapacity[i].selected = true;
+      }
+    }
+  }
+};
+
+roomNumber.addEventListener('change', changeCapacity);
 
 // валидация формы
 var validateForm = function () {
-  return validateTitle() & validatePrice() ? true : false;
+  return validateTitle() & validatePrice();
 };
 
 // проверка и отправка формы кнопкой "опубликовать"
 submitAdButton.addEventListener('submit', function (evt) {
-  evt.preventDefault();
-  if (validateForm()) {
-    // отправка формы
+  if (!validateForm()) {
+    evt.preventDefault();
   }
+});
+
+// установка начальных значений и отключение форм
+setStartAddress();
+changeCapacity();
+disableFormAd();
+disableFormFilter();
+
+pinMain.addEventListener('click', function () {
+  activateFormAd();
+  activateFormFilter();
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  addTagsToMap();
 });
