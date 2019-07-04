@@ -138,6 +138,9 @@ var validateTitle = function () {
 
 // валидация цены
 var validatePrice = function () {
+  if (priceInput.length === 0) {
+    return false;
+  }
   var isValid = Number(priceInput.value) >= Number(priceInput.min) && Number(priceInput.value) <= 1000000;
   if (isValid) {
     return true;
@@ -183,7 +186,7 @@ var changeCapacity = function () {
   for (var j = 0; j < suitableOptions.length; j++) {
     for (i = 0; i < optionsCapacity.length; i++) {
       if (suitableOptions[j] === Number(optionsCapacity[i].value)) {
-        optionsCapacity[i].removeAttribute('disabled', 'disabled');
+        optionsCapacity[i].removeAttribute('disabled');
         optionsCapacity[i].selected = true;
       }
     }
@@ -217,3 +220,4 @@ pinMain.addEventListener('click', function () {
   adForm.classList.remove('ad-form--disabled');
   addTagsToMap();
 });
+
