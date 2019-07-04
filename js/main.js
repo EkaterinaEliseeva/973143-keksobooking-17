@@ -138,7 +138,7 @@ var validateTitle = function () {
 
 // валидация цены
 var validatePrice = function () {
-  if (priceInput.length === 0) {
+  if (priceInput.value.length === 0) {
     return false;
   }
   var isValid = Number(priceInput.value) >= Number(priceInput.min) && Number(priceInput.value) <= 1000000;
