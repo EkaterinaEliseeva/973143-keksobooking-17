@@ -227,6 +227,7 @@ adForm.addEventListener('submit', function (evt) {
 
 // установка начальных значений и отключение форм
 // changeCapacity();
+
 disableFormAd();
 disableFormFilter();
 
@@ -239,4 +240,3 @@ pinMain.addEventListener('click', function () {
   adForm.classList.remove('ad-form--disabled');
   addTagsToMap();
 });
-
