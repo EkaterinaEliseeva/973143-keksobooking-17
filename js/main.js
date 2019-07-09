@@ -1,6 +1,8 @@
 'use strict';
 var PIN_HEIGHT = 70;
 var PIN_WIDTH = 40;
+var MIN_LENGTH_TITLE = 30;
+var MAX_LENGTH_TITLE = 100;
 
 var mapPins = document.querySelector('.map__pins');
 var map = document.querySelector('.map');
@@ -16,9 +18,8 @@ var titleInput = document.querySelector('#title');
 var priceInput = document.querySelector('#price');
 var timeIn = document.querySelector('#timein');
 var timeOut = document.querySelector('#timeout');
-var roomNumber = document.querySelector('#room_number');
-var capacity = document.querySelector('#capacity');
-var submitAdButton = document.querySelector('.ad-form__submit');
+// var roomNumber = document.querySelector('#room_number');
+// var capacity = document.querySelector('#capacity');
 
 var minX = 0;
 var maxX = mapPins.getBoundingClientRect().width;
@@ -31,12 +32,12 @@ var minPrice = {
   PALACE: 10000
 };
 
-var optionsRoom = {
-  1: [1],
-  2: [1, 2],
-  3: [1, 2, 3],
-  100: [0]
-};
+// var optionsRoom = {
+//   1: [1],
+//   2: [1, 2],
+//   3: [1, 2, 3],
+//   100: [0]
+// };
 
 // генерация рандомного числа в промежутке
 var generateIntInGap = function (min, max) {
@@ -125,35 +126,52 @@ var setStartAddress = function () {
   addressInput.value = x + ', ' + y;
 };
 
+// установка минимального и максимального значений цены
+var setMinAndMaxPrice = function () {
+  priceInput.min = minPrice[typeOffer.value.toUpperCase()];
+  priceInput.max = 1000000;
+};
+
 // валидация заголовка объявления
 var validateTitle = function () {
-  var isValid = titleInput.value.length >= 30 && titleInput.value.length <= 100;
+  var isValid = titleInput.value.length >= MIN_LENGTH_TITLE && titleInput.value.length <= MAX_LENGTH_TITLE;
   if (isValid) {
+    titleInput.setCustomValidity('');
     return true;
+  } else {
+    titleInput.setCustomValidity('Введите заголовок длиной от 30 до 100 символов');
+    titleInput.focus();
+    return false;
   }
-  titleInput.setCustomValidity('Введите заголовок длиной от 30 до 100 символов');
-  titleInput.focus();
-  return false;
 };
+
+titleInput.addEventListener('input', validateTitle);
 
 // валидация цены
 var validatePrice = function () {
   if (priceInput.value.length === 0) {
+    priceInput.setCustomValidity('Введите число от ' + priceInput.min + ' до 1000000');
+    priceInput.focus();
     return false;
   }
-  var isValid = Number(priceInput.value) >= Number(priceInput.min) && Number(priceInput.value) <= 1000000;
+  var isValid = Number(priceInput.value) >= Number(priceInput.min) && Number(priceInput.value) <= Number(priceInput.max);
   if (isValid) {
+    priceInput.setCustomValidity('');
     return true;
+  } else {
+    priceInput.setCustomValidity('Введите число от ' + priceInput.min + ' до 1000000');
+    priceInput.focus();
+    return false;
   }
-  priceInput.setCustomValidity('Введите число от ' + priceInput.min + ' до 1000000');
-  priceInput.focus();
-  return false;
 };
+
+priceInput.addEventListener('input', validatePrice);
 
 // установка минимальных значений цены за ночь, в зависимости от типа жилья
 typeOffer.addEventListener('change', function () {
   priceInput.min = minPrice[typeOffer.value.toUpperCase()];
   priceInput.placeholder = minPrice[typeOffer.value.toUpperCase()];
+  validatePrice();
 });
 
 // синхронизация времени заезда и выезда
@@ -169,52 +187,53 @@ timeIn.addEventListener('change', synchronizeTime);
 timeOut.addEventListener('change', synchronizeTime);
 
 // изменение вместимости в зависимости от кол-ва комнат
-var changeCapacity = function () {
-  // варианты вместимости
-  var optionsCapacity = capacity.options;
-  // отключение всех
-  for (var i = 0; i < capacity.options.length; i++) {
-    optionsCapacity[i].setAttribute('disabled', 'disabled');
-    if (optionsCapacity[i].selected) {
-      optionsCapacity[i].selected = false;
-    }
-  }
-  // подходящие варианты для определенной roomNumber
-  var suitableOptions = optionsRoom[roomNumber.value];
+// var changeCapacity = function () {
+//   // варианты вместимости
+//   var optionsCapacity = capacity.options;
+//   // отключение всех
+//   for (var i = 0; i < capacity.options.length; i++) {
+//     optionsCapacity[i].setAttribute('disabled', 'disabled');
+//     if (optionsCapacity[i].selected) {
+//       optionsCapacity[i].selected = false;
+//     }
+//   }
+//   // подходящие варианты для определенной roomNumber
+//   var suitableOptions = optionsRoom[roomNumber.value];
 
-  // мне это не нравится, но пока не пойму как сделать
-  for (var j = 0; j < suitableOptions.length; j++) {
-    for (i = 0; i < optionsCapacity.length; i++) {
-      if (suitableOptions[j] === Number(optionsCapacity[i].value)) {
-        optionsCapacity[i].removeAttribute('disabled');
-        optionsCapacity[i].selected = true;
-      }
-    }
-  }
-};
+//   // мне это не нравится, но пока не пойму как сделать
+//   for (var j = 0; j < suitableOptions.length; j++) {
+//     for (i = 0; i < optionsCapacity.length; i++) {
+//       if (suitableOptions[j] === Number(optionsCapacity[i].value)) {
+//         optionsCapacity[i].removeAttribute('disabled');
+//         optionsCapacity[i].selected = true;
+//       }
+//     }
+//   }
+// };
 
-roomNumber.addEventListener('change', changeCapacity);
+// roomNumber.addEventListener('change', changeCapacity);
 
 // валидация формы
 var validateForm = function () {
-  return validateTitle() & validatePrice();
+  return validateTitle() && validatePrice();
 };
 
 // проверка и отправка формы кнопкой "опубликовать"
-submitAdButton.addEventListener('submit', function (evt) {
+adForm.addEventListener('submit', function (evt) {
   if (!validateForm()) {
     evt.preventDefault();
   }
 });
 
 // установка начальных значений и отключение форм
-setStartAddress();
-changeCapacity();
+// changeCapacity();
 disableFormAd();
 disableFormFilter();
 
 pinMain.addEventListener('click', function () {
   activateFormAd();
+  setStartAddress();
+  setMinAndMaxPrice();
   activateFormFilter();
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
