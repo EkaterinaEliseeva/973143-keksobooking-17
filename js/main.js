@@ -1,6 +1,6 @@
 'use strict';
-var PIN_HEIGHT = 70;
-var PIN_WIDTH = 40;
+var PIN_HEIGHT = 65;
+var PIN_WIDTH = 65;
 var MIN_LENGTH_TITLE = 30;
 var MAX_LENGTH_TITLE = 100;
 
@@ -20,6 +20,7 @@ var timeIn = document.querySelector('#timein');
 var timeOut = document.querySelector('#timeout');
 // var roomNumber = document.querySelector('#room_number');
 // var capacity = document.querySelector('#capacity');
+var isActivePage = false;
 
 var minX = 0;
 var maxX = mapPins.getBoundingClientRect().width;
@@ -126,6 +127,10 @@ var setStartAddress = function () {
   addressInput.value = x + ', ' + y;
 };
 
+var setAddress = function (x, y) {
+  addressInput.value = x + ', ' + y;
+};
+
 // установка минимального и максимального значений цены
 var setMinAndMaxPrice = function () {
   priceInput.min = minPrice[typeOffer.value.toUpperCase()];
@@ -226,17 +231,88 @@ adForm.addEventListener('submit', function (evt) {
 });
 
 // установка начальных значений и отключение форм
-// changeCapacity();
-
 disableFormAd();
 disableFormFilter();
+setStartAddress();
 
-pinMain.addEventListener('click', function () {
+// активация страницы
+var activatePage = function () {
   activateFormAd();
-  setStartAddress();
   setMinAndMaxPrice();
   activateFormFilter();
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
   addTagsToMap();
+};
+// перетаскивание метки
+pinMain.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  // активация страницы при первом перетаскивании/нажатии
+  if (!isActivePage) {
+    activatePage();
+    isActivePage = true;
+  }
+
+  // начальные координаты метки
+  var startCoords = {
+    x: evt.clientX + PIN_WIDTH / 2,
+    y: evt.clientY + PIN_HEIGHT
+  };
+  // установка начальных координат в поле формы
+  setAddress(startCoords.x, startCoords.y);
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+    // границы перетаскивания
+    var mapLimits = {
+      top: 130,
+      right: mapPins.offsetWidth + mapPins.offsetLeft - PIN_WIDTH / 2,
+      bottom: 630,
+      left: mapPins.offsetLeft - PIN_WIDTH / 2
+    };
+    // перемещение метки
+    var shift = {
+      x: startCoords.x - (moveEvt.clientX + PIN_WIDTH / 2),
+      y: startCoords.y - (moveEvt.clientY + PIN_HEIGHT)
+    };
+    // координаты перемещенной метки
+    var newCoords = {
+      x: pinMain.offsetLeft - shift.x,
+      y: pinMain.offsetTop - shift.y
+    };
+    // проверка выхода за ограничения
+    if (newCoords.x > mapLimits.right) {
+      newCoords.x = mapLimits.right;
+    } else if (newCoords.x < mapLimits.left) {
+      newCoords.x = mapLimits.left;
+    }
+
+    if (newCoords.y < mapLimits.top) {
+      newCoords.y = mapLimits.top;
+    } else if (newCoords.y > mapLimits.bottom) {
+      newCoords.y = mapLimits.bottom;
+    }
+
+    startCoords = {
+      x: moveEvt.clientX + PIN_WIDTH / 2,
+      y: moveEvt.clientY + PIN_HEIGHT
+    };
+
+    pinMain.style.top = newCoords.y + 'px';
+    pinMain.style.left = newCoords.x + 'px';
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+    // утстановка новых координат в поле формы
+    setAddress(startCoords.x, startCoords.y);
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
 });
+
