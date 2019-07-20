@@ -7,6 +7,20 @@
   var mapPins = window.util.mapPins;
   var pinMain = window.util.pinMain;
 
+  var pin = document.querySelector('#pin').content.querySelector('.map__pin');
+
+  // присваивание метке значений элемента массива
+  var renderPin = function (pinsElement) {
+    var pinElem = pin.cloneNode(true);
+
+    pinElem.style.left = pinsElement.location.x - window.util.PIN_WIDTH / 2 + 'px';
+    pinElem.style.top = pinsElement.location.y - window.util.PIN_HEIGHT + 'px';
+    pinElem.querySelector('img').setAttribute('src', pinsElement.author.avatar);
+    pinElem.querySelector('img').setAttribute('alt', pinsElement.offer.type);
+
+    return pinElem;
+  };
+
   // перетаскивание метки
   pinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -78,4 +92,8 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
+
+  window.pin = {
+    renderPin: renderPin
+  };
 })();
