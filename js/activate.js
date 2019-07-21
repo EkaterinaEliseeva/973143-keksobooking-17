@@ -20,7 +20,7 @@
   var onErrorButtonClick = function (evt) {
     evt.preventDefault();
     removeErrorModal();
-    window.load('https://js.dump.academy/keksobooking/data//', onSuccess, onError);
+    window.load('https://js.dump.academy/keksobooking/data', onSuccess, onError);
   };
 
   var onError = function (message) {
