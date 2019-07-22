@@ -10,6 +10,7 @@
 
   var onSuccess = function (pins) {
     window.map.addTagsToMap(pins);
+    window.activate.pins = pins;
   };
 
   var removeErrorModal = function () {

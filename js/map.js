@@ -3,14 +3,26 @@
   // добавление меток на карту
   var addTagsToMap = function (pins) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < 5; i++) {
-      fragment.appendChild(window.pin.renderPin(pins[i]));
-    }
+    pins
+    .slice()
+    .slice(0, 5)
+    .forEach(function (pinItem) {
+      fragment.appendChild(window.pin.renderPin(pinItem));
+    });
     window.util.mapPins.appendChild(fragment);
   };
 
+  var deleteTagsFromMap = function () {
+    var mapPins = document.querySelectorAll('.map__pin--small');
+    mapPins.forEach(function (mapPinItem) {
+      mapPinItem.remove();
+    });
+
+  };
+
   window.map = {
-    addTagsToMap: addTagsToMap
+    addTagsToMap: addTagsToMap,
+    deleteTagsFromMap: deleteTagsFromMap
   };
 })();
 
