@@ -9,6 +9,7 @@
       fragment.appendChild(window.pin.renderPin(pinItem));
     });
     window.util.mapPins.appendChild(fragment);
+    window.card.renderCard(pins);
   };
 
   var deleteTagsFromMap = function () {

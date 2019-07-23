@@ -6,6 +6,7 @@
   var MIN_LENGTH_TITLE = 30;
   var MAX_LENGTH_TITLE = 100;
 
+  var map = document.querySelector('.map');
   var pinMain = document.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
   var mapPins = document.querySelector('.map__pins');
@@ -20,6 +21,7 @@
     PIN_WIDTH: PIN_WIDTH,
     MIN_LENGTH_TITLE: MIN_LENGTH_TITLE,
     MAX_LENGTH_TITLE: MAX_LENGTH_TITLE,
+    map: map,
     pinMain: pinMain,
     adForm: adForm,
     mapPins: mapPins,
