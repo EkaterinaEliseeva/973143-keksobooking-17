@@ -4,7 +4,6 @@
   var addTagsToMap = function (pins) {
     var fragment = document.createDocumentFragment();
     pins
-    .slice()
     .slice(0, 5)
     .forEach(function (pinItem) {
       fragment.appendChild(window.pin.renderPin(pinItem));
