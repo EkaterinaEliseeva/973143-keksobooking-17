@@ -6,10 +6,10 @@
   var MIN_LENGTH_TITLE = 30;
   var MAX_LENGTH_TITLE = 100;
 
-  var map = document.querySelector('.map');
   var pinMain = document.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
   var mapPins = document.querySelector('.map__pins');
+  var map = document.querySelector('.map');
 
   // генерация рандомного числа в промежутке
   var generateIntInGap = function (min, max) {
