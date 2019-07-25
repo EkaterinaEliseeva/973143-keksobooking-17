@@ -35,6 +35,7 @@
       x: evt.clientX + PIN_WIDTH / 2,
       y: evt.clientY + PIN_HEIGHT
     };
+
     // установка начальных координат в поле формы
     window.form.setAddress(startCoords.x, startCoords.y);
 

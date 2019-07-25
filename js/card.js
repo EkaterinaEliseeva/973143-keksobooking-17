@@ -23,7 +23,7 @@
   var cardPhotos = card.querySelector('.popup__photos');
   var cardAvatar = card.querySelector('.popup__avatar');
   var photo = cardPhotos.querySelector('.popup__photo');
-  var closeButton = card.querySelector('.popup__close'); 
+  var closeButton = card.querySelector('.popup__close');
 
   var deleteList = function (list) {
     list.forEach(function (listItem) {
@@ -42,9 +42,9 @@
   var createFeaturesList = function (features) {
     var featuresList = card.querySelectorAll('.popup__feature');
     if (featuresList) {
-      deleteList(featuresList);     
+      deleteList(featuresList);
     }
-    features.forEach(function (feature) {  
+    features.forEach(function (feature) {
       cardFeatures.appendChild(createFeature(feature));
     });
   };
@@ -53,7 +53,7 @@
     var photoItem = photo.cloneNode(true);
     photoItem.setAttribute('src', srcPhoto);
     return photoItem;
-  }
+  };
 
   var createPhotoGallery = function (photos) {
     var photoGallery = cardPhotos.querySelectorAll('.popup__photo');
@@ -66,8 +66,8 @@
   };
 
   var deleteCard = function () {
-    var card = map.querySelector('.map__card');
-    card.remove();
+    var currentCard = map.querySelector('.map__card');
+    currentCard.remove();
   };
 
   var closeButtonOnclick = function () {
@@ -83,7 +83,6 @@
   };
 
   var renderCard = function (pinsItem) {
-    
 
     var offer = pinsItem.offer;
     // добавление названия предложения
@@ -100,7 +99,7 @@
 
     // добавление вместимости
     cardCapacity.textContent = offer.rooms + ' комнаты для ' + offer.guests + ' гостей.';
-    
+
     // добавление времени заезда и выезда
     cardTime.textContent = 'Заезд после' + offer.checkin + ', выезд до ' + offer.checkout;
 
@@ -130,7 +129,4 @@
     renderCard: renderCard,
     deleteCard: deleteCard
   };
-
-
-
 })();

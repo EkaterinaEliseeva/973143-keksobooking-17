@@ -9,6 +9,7 @@
     HOUSE: 5000,
     PALACE: 10000
   };
+  var successModal;
 
   var adForm = window.util.adForm;
   var adFieldsInput = adForm.querySelectorAll('fieldset');
@@ -50,10 +51,8 @@
   };
 
   // установка начального значения адреса
-  var setStartAddress = function () {
-    var x = pinMain.offsetLeft;
-    var y = pinMain.offsetTop;
-    addressInput.value = x + ', ' + y;
+  var setStartAddress = function (startAddress) {
+    addressInput.value = startAddress.x + ', ' + startAddress.y;
   };
 
   var setAddress = function (x, y) {
@@ -127,10 +126,66 @@
     return validateTitle() && validatePrice();
   };
 
+  var returnPinToStart = function (startAddress) {
+    pinMain.offsetLeft = startAddress.x;
+    pinMain.offsetTop = startAddress.y;
+    setStartAddress(window.util.pinMainStartAddress);
+  };
+
+  var removeSuccessModal = function () {
+    successModal.remove();
+    document.removeEventListener('click', onSuccessClickHanler);
+    document.removeEventListener('keydown', onSuccessEscButtonPress);
+  };
+
+  var onSuccessClickHanler = function (evt) {
+    evt.preventDefault();
+    removeSuccessModal();
+  };
+
+  var onSuccessEscButtonPress = function (evt) {
+    evt.preventDefault();
+    if (evt.keyCode === 27) {
+      removeSuccessModal();
+    }
+  };
+
+  var onSuccessSend = function () {
+    var successTemplate = document.querySelector('#success').content.querySelector('.success');
+    var mainBlock = window.util.mainBlock;
+
+    // сброс полей формы
+    window.util.adForm.reset();
+
+    // удаление меток
+    window.map.deleteTagsFromMap();
+
+    // удаление карточки
+    window.card.deleteCard();
+
+    // возвращение пина в начальную позицию
+    returnPinToStart(window.util.pinMainStartAddress);
+
+    // создание попапа с сообщением об успехе
+    successModal = successTemplate.cloneNode(true);
+
+    // обработчики закрытия попапа
+    document.addEventListener('click', onSuccessClickHanler);
+    document.addEventListener('keydown', onSuccessEscButtonPress);
+
+    // добавление сообщения в разметку
+    mainBlock.insertAdjacentElement('afterbegin', successModal);
+  };
+
   // проверка и отправка формы кнопкой "опубликовать"
   adForm.addEventListener('submit', function (evt) {
     if (!validateForm()) {
       evt.preventDefault();
+    } else {
+      evt.preventDefault();
+      var formData = new FormData(window.util.adForm);
+
+      window.load.upload(formData, onSuccessSend, window.activate.onError);
     }
   });
 

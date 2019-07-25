@@ -10,6 +10,11 @@
   var adForm = document.querySelector('.ad-form');
   var mapPins = document.querySelector('.map__pins');
   var map = document.querySelector('.map');
+  var mainBlock = document.querySelector('main');
+  var pinMainStartAddress = {
+    x: pinMain.offsetLeft,
+    y: pinMain.offsetTop
+  };
 
   // генерация рандомного числа в промежутке
   var generateIntInGap = function (min, max) {
@@ -25,6 +30,8 @@
     pinMain: pinMain,
     adForm: adForm,
     mapPins: mapPins,
+    mainBlock: mainBlock,
+    pinMainStartAddress: pinMainStartAddress,
     generateIntInGap: generateIntInGap
   };
 })();

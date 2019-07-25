@@ -5,7 +5,7 @@
   var onPinClickHandler = function (pinItem) {
     window.card.deleteCard();
     window.card.renderCard(pinItem);
-  }
+  };
 
   // добавление меток на карту
   var addTagsToMap = function (pins) {
@@ -17,15 +17,20 @@
       pins
       .slice(0, 5)
       .forEach(function (pinItem) {
+
         // рендер элемента
         var pinsElement = window.pin.renderPin(pinItem);
+
         // добавление элемента в фрагмент
         fragment.appendChild(pinsElement);
+
         // добавление элемента в массив отрисованных
         renderPins.push(pinsElement);
       });
+
       // добавление фрагмента в разметку
       window.util.mapPins.appendChild(fragment);
+
       // добавление обработчиков клика на пины
       renderPins.forEach(function (pinsElementItem, i) {
         pinsElementItem.addEventListener('click', function () {
