@@ -24,22 +24,26 @@
   var cardAvatar = card.querySelector('.popup__avatar');
   var photo = cardPhotos.querySelector('.popup__photo');
   var closeButton = card.querySelector('.popup__close');
+  var featuresBlock = card.querySelector('.popup__features');
+  var featuresList = card.querySelectorAll('.popup__feature');
+  var photoGallery = cardPhotos.querySelectorAll('.popup__photo');
 
+  // удаление списка
   var deleteList = function (list) {
     list.forEach(function (listItem) {
       listItem.remove();
     });
   };
 
-
+  // создание элемента из списка удобств
   var createFeature = function (feature) {
     var featureItem = document.createElement('li');
     featureItem.classList.add('popup__feature', 'popup__feature--' + feature);
     return featureItem;
   };
 
+  // создание списка удобств
   var createFeaturesList = function (features) {
-    var featuresList = card.querySelectorAll('.popup__feature');
     if (featuresList) {
       deleteList(featuresList);
     }
@@ -48,14 +52,15 @@
     });
   };
 
+  // создание фотографии
   var createPhotoItem = function (srcPhoto) {
     var photoItem = photo.cloneNode(true);
     photoItem.setAttribute('src', srcPhoto);
     return photoItem;
   };
 
+  // создание списка фотографий
   var createPhotoGallery = function (photos) {
-    var photoGallery = cardPhotos.querySelectorAll('.popup__photo');
     if (photoGallery) {
       deleteList(photoGallery);
     }
@@ -64,6 +69,7 @@
     });
   };
 
+  // удаление карточки
   var deleteCard = function () {
     var currentCard = map.querySelector('.map__card');
     if (currentCard) {
@@ -71,17 +77,20 @@
     }
   };
 
-  var closeButtonOnclick = function () {
+  // закрытие карточки по клику на кнопку
+  var onСloseButtonСlick = function () {
     deleteCard();
-    closeButton.removeEventListener('click', closeButtonOnclick);
+    closeButton.removeEventListener('click', onСloseButtonСlick);
   };
 
+  // закрытие карточки по нажатию esc
   var escButtonPress = function (evt) {
-    if (evt.keyCode === 27) {
+    if (evt.keyCode === window.util.ESC_KEY_CODE) {
       deleteCard();
     }
     document.removeEventListener('keydown', escButtonPress);
   };
+
   // проверяет имеет ли объект свойство offer
   var isOffer = function (pinsItem) {
     return pinsItem.offer ? true : false;
@@ -92,15 +101,12 @@
     block.style.display = 'none';
   };
 
+  // создание карточки
   var renderCard = function (pinsItem) {
     if (isOffer) {
       var offer = pinsItem.offer;
       // добавление названия предложения
-      if (offer.title) {
-        cardTitle.textContent = offer.title;
-      } else {
-        hiddenBlock(cardTitle);
-      }
+      cardTitle.textContent = offer.title;
 
       // добавление адреса предложения
       cardAddress.textContent = offer.address;
@@ -118,14 +124,25 @@
       cardTime.textContent = 'Заезд после' + offer.checkin + ', выезд до ' + offer.checkout;
 
       // добавление списка удобств
-      if (offer.features !== 0) {
+      if (offer.features) {
         createFeaturesList(offer.features);
+      } else {
+        hiddenBlock(featuresBlock);
       }
+
       // добавление описания предложения
-      cardDescription.textContent = offer.description;
+      if (offer.description) {
+        cardDescription.textContent = offer.description;
+      } else {
+        hiddenBlock(cardDescription);
+      }
 
       // добавление изображений
-      createPhotoGallery(offer.photos);
+      if (offer.photos) {
+        createPhotoGallery(offer.photos);
+      } else {
+        hiddenBlock(cardPhotos);
+      }
 
       // добавление ссылки аватара
       cardAvatar.setAttribute('src', pinsItem.author.avatar);
@@ -133,12 +150,13 @@
       // вставляем карточку в разметку
       map.insertBefore(card, mapFiltersBlock);
 
-      closeButton.addEventListener('click', closeButtonOnclick);
+      // добавление обработчика клика на кнопку закрытия
+      closeButton.addEventListener('click', onСloseButtonСlick);
 
+      // добавлвение обработчика клика на esc
       document.addEventListener('keydown', escButtonPress);
     }
   };
-
 
   window.card = {
     renderCard: renderCard,

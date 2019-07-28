@@ -3,7 +3,6 @@
   var PIN_HEIGHT = 65;
   var PIN_WIDTH = 65;
 
-  var isActivePage = false;
   var mapPins = window.util.mapPins;
   var pinMain = window.util.pinMain;
 
@@ -17,8 +16,9 @@
     pinElem.querySelector('img').setAttribute('src', pinsElement.author.avatar);
     pinElem.querySelector('img').setAttribute('alt', pinsElement.offer.type);
     pinElem.classList.add('map__pin--small');
+
     // добавление id, соответствующего id в массиве данных о предложении для отлавливания событий и отрисовки карточки
-    pinElem.id = id;
+    pinElem.setAttribute('data-id', id);
     return pinElem;
   };
 
@@ -27,10 +27,7 @@
     evt.preventDefault();
 
     // активация страницы при первом перетаскивании/нажатии
-    if (!isActivePage) {
-      window.activate.activatePage();
-      isActivePage = true;
-    }
+    window.activate.activatePage();
 
     // начальные координаты метки
     var startCoords = {
@@ -43,6 +40,7 @@
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
+
       // границы перетаскивания
       var mapLimits = {
         top: 130,
@@ -50,34 +48,40 @@
         bottom: 630,
         left: mapPins.offsetLeft - PIN_WIDTH / 2
       };
+
       // перемещение метки
       var shift = {
         x: startCoords.x - (moveEvt.clientX + PIN_WIDTH / 2),
         y: startCoords.y - (moveEvt.clientY + PIN_HEIGHT)
       };
+
       // координаты перемещенной метки
       var newCoords = {
         x: pinMain.offsetLeft - shift.x,
         y: pinMain.offsetTop - shift.y
       };
-      // проверка выхода за ограничения
+
+      // проверка выхода за горизонтальные ограничения
       if (newCoords.x > mapLimits.right) {
         newCoords.x = mapLimits.right;
       } else if (newCoords.x < mapLimits.left) {
         newCoords.x = mapLimits.left;
       }
 
+      // проверка выхода за вертикальные ограничения
       if (newCoords.y < mapLimits.top) {
         newCoords.y = mapLimits.top;
       } else if (newCoords.y > mapLimits.bottom) {
         newCoords.y = mapLimits.bottom;
       }
 
+      // установка новых начальных координат
       startCoords = {
         x: moveEvt.clientX + PIN_WIDTH / 2,
         y: moveEvt.clientY + PIN_HEIGHT
       };
 
+      // изменение положения метки
       pinMain.style.top = newCoords.y + 'px';
       pinMain.style.left = newCoords.x + 'px';
     };
@@ -87,10 +91,12 @@
       // утстановка новых координат в поле формы
       window.form.setAddress(startCoords.x, startCoords.y);
 
+      // удаление обработчиков mousemove и mouseup
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
 
+    // добавление обработчиков mousemove и mouseup
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });

@@ -1,15 +1,37 @@
 'use strict';
 (function () {
 
-  // обработчик клика на метке, удаляет старую карточку и создает новую.
-  var onPinClickHandler = function (pinItem) {
-    window.card.deleteCard();
-    window.card.renderCard(pinItem);
+  // обработка кликов на метках
+  var mapClickHandler = function (pins, target) {
+
+    // всплытие события до элемента mapPins, чтобы клик внутри метки(по фото) поднимался до метки
+    while (target !== window.util.mapPins) {
+
+      // проверка соответствует ли target метке
+      if (target.classList.contains('map__pin--small')) {
+
+        // добавление класса active метке
+        target.classList.add('.map__pin--active');
+
+        // удаление старой карточки
+        window.card.deleteCard();
+
+        // добавление новой карточки
+        window.card.renderCard(pins[target.getAttribute('data-id')]);
+
+        return;
+      }
+
+      // переход к родительскому target
+      target = target.parentNode;
+    }
   };
 
   // добавление меток на карту
   var addTagsToMap = function (pins) {
+
     var fragment = document.createDocumentFragment();
+
     // массив отрисованных пинов
     var renderPins = [];
 
@@ -31,42 +53,26 @@
       // добавление фрагмента в разметку
       window.util.mapPins.appendChild(fragment);
 
-      // // добавление обработчиков клика на пины
-      // renderPins.forEach(function (pinsElementItem, i) {
-      //   pinsElementItem.addEventListener('click', function () {
-      //     onPinClickHandler(pins[i]);
-      //   });
-      //   pinsElementItem.addEventListener('keydown', function (evt) {
-      //     if (evt.keyCode === 13) {
-      //       onPinClickHandler(pins[i]);
-      //     }
-      //   });
-      // });
-
       // добавление обработчика кликов на карте
       window.util.mapPins.addEventListener('click', function (evt) {
+
         var target = evt.target;
-        // всплытие события до элемента mapPins, чтобы клик внутри маркера(по фото) поднимался до маркера
-        while (target !== window.util.mapPins) {
-          // проверка соответствует ли target маркеру
-          if (target.classList.contains('map__pin--small')) {
-            // вызов обработчика, удаляющего старую карточку и создающего новую.
-            onPinClickHandler(pins[target.id]);
-            return;
-          }
-          // переход к родительскому target
-          target = target.parentNode;
-        }
+
+        mapClickHandler(pins, target);
+
       });
     }
+
   };
 
+  // удаление меток с карты
   var deleteTagsFromMap = function () {
+
     var mapPins = document.querySelectorAll('.map__pin--small');
+
     mapPins.forEach(function (mapPinItem) {
       mapPinItem.remove();
     });
-
   };
 
   window.map = {
