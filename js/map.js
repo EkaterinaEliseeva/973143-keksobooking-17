@@ -37,7 +37,7 @@
 
     if (pins.length !== 0) {
       pins
-      .slice(0, 5)
+      .slice(0, window.util.MAX_PINS)
       .forEach(function (pinItem, id) {
 
         // рендер элемента

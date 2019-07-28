@@ -25,8 +25,6 @@
   var photo = cardPhotos.querySelector('.popup__photo');
   var closeButton = card.querySelector('.popup__close');
   var featuresBlock = card.querySelector('.popup__features');
-  var featuresList = card.querySelectorAll('.popup__feature');
-  var photoGallery = cardPhotos.querySelectorAll('.popup__photo');
 
   // удаление списка
   var deleteList = function (list) {
@@ -44,6 +42,7 @@
 
   // создание списка удобств
   var createFeaturesList = function (features) {
+    var featuresList = card.querySelectorAll('.popup__feature');
     if (featuresList) {
       deleteList(featuresList);
     }
@@ -61,6 +60,7 @@
 
   // создание списка фотографий
   var createPhotoGallery = function (photos) {
+    var photoGallery = cardPhotos.querySelectorAll('.popup__photo');
     if (photoGallery) {
       deleteList(photoGallery);
     }

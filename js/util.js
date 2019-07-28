@@ -7,6 +7,7 @@
   var MAX_LENGTH_TITLE = 100;
   var ESC_KEY_CODE = 27;
   var ENTER_KEY_CODE = 13;
+  var MAX_PINS = 5;
 
   var pinMain = document.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
@@ -25,6 +26,7 @@
     MAX_LENGTH_TITLE: MAX_LENGTH_TITLE,
     ESC_KEY_CODE: ESC_KEY_CODE,
     ENTER_KEY_CODE: ENTER_KEY_CODE,
+    MAX_PINS: MAX_PINS,
     map: map,
     pinMain: pinMain,
     adForm: adForm,
