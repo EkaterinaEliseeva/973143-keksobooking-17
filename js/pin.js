@@ -10,13 +10,15 @@
   var pin = document.querySelector('#pin').content.querySelector('.map__pin');
 
   // присваивание метке значений элемента массива
-  var renderPin = function (pinsElement) {
+  var renderPin = function (pinsElement, id) {
     var pinElem = pin.cloneNode(true);
     pinElem.style.left = pinsElement.location.x - window.util.PIN_WIDTH / 2 + 'px';
     pinElem.style.top = pinsElement.location.y - window.util.PIN_HEIGHT + 'px';
     pinElem.querySelector('img').setAttribute('src', pinsElement.author.avatar);
     pinElem.querySelector('img').setAttribute('alt', pinsElement.offer.type);
     pinElem.classList.add('map__pin--small');
+    // добавление id, соответствующего id в массиве данных о предложении для отлавливания событий и отрисовки карточки
+    pinElem.id = id;
     return pinElem;
   };
 

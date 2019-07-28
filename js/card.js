@@ -34,8 +34,7 @@
 
   var createFeature = function (feature) {
     var featureItem = document.createElement('li');
-    featureItem.classList.add('popup__feature');
-    featureItem.classList.add('popup__feature--' + feature);
+    featureItem.classList.add('popup__feature', 'popup__feature--' + feature);
     return featureItem;
   };
 
@@ -67,7 +66,9 @@
 
   var deleteCard = function () {
     var currentCard = map.querySelector('.map__card');
-    currentCard.remove();
+    if (currentCard) {
+      currentCard.remove();
+    }
   };
 
   var closeButtonOnclick = function () {
@@ -81,47 +82,61 @@
     }
     document.removeEventListener('keydown', escButtonPress);
   };
+  // проверяет имеет ли объект свойство offer
+  var isOffer = function (pinsItem) {
+    return pinsItem.offer ? true : false;
+  };
+
+  // скрывает блок в карточке, если его нет
+  var hiddenBlock = function (block) {
+    block.style.display = 'none';
+  };
 
   var renderCard = function (pinsItem) {
+    if (isOffer) {
+      var offer = pinsItem.offer;
+      // добавление названия предложения
+      if (offer.title) {
+        cardTitle.textContent = offer.title;
+      } else {
+        hiddenBlock(cardTitle);
+      }
 
-    var offer = pinsItem.offer;
-    // добавление названия предложения
-    cardTitle.textContent = offer.title;
+      // добавление адреса предложения
+      cardAddress.textContent = offer.address;
 
-    // добавление адреса предложения
-    cardAddress.textContent = offer.address;
+      // добавление цены предложения
+      cardPrice.textContent = offer.price + '₽/ночь';
 
-    // добавление цены предложения
-    cardPrice.textContent = offer.price + '₽/ночь';
+      // добавление типа предложения
+      cardTypeOfHousing.textContent = TYPE_HOUSING[offer.type];
 
-    // добавление типа предложения
-    cardTypeOfHousing.textContent = TYPE_HOUSING[offer.type];
+      // добавление вместимости
+      cardCapacity.textContent = offer.rooms + ' комнаты для ' + offer.guests + ' гостей.';
 
-    // добавление вместимости
-    cardCapacity.textContent = offer.rooms + ' комнаты для ' + offer.guests + ' гостей.';
+      // добавление времени заезда и выезда
+      cardTime.textContent = 'Заезд после' + offer.checkin + ', выезд до ' + offer.checkout;
 
-    // добавление времени заезда и выезда
-    cardTime.textContent = 'Заезд после' + offer.checkin + ', выезд до ' + offer.checkout;
+      // добавление списка удобств
+      if (offer.features !== 0) {
+        createFeaturesList(offer.features);
+      }
+      // добавление описания предложения
+      cardDescription.textContent = offer.description;
 
-    // добавление списка удобств
-    if (offer.features !== 0) {
-      createFeaturesList(offer.features);
+      // добавление изображений
+      createPhotoGallery(offer.photos);
+
+      // добавление ссылки аватара
+      cardAvatar.setAttribute('src', pinsItem.author.avatar);
+
+      // вставляем карточку в разметку
+      map.insertBefore(card, mapFiltersBlock);
+
+      closeButton.addEventListener('click', closeButtonOnclick);
+
+      document.addEventListener('keydown', escButtonPress);
     }
-    // добавление описания предложения
-    cardDescription.textContent = offer.description;
-
-    // добавление изображений
-    createPhotoGallery(offer.photos);
-
-    // добавление ссылки аватара
-    cardAvatar.setAttribute('src', pinsItem.author.avatar);
-
-    // вставляем карточку в разметку
-    map.insertBefore(card, mapFiltersBlock);
-
-    closeButton.addEventListener('click', closeButtonOnclick);
-
-    document.addEventListener('keydown', escButtonPress);
   };
 
 

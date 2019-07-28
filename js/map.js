@@ -16,10 +16,10 @@
     if (pins.length !== 0) {
       pins
       .slice(0, 5)
-      .forEach(function (pinItem) {
+      .forEach(function (pinItem, id) {
 
         // рендер элемента
-        var pinsElement = window.pin.renderPin(pinItem);
+        var pinsElement = window.pin.renderPin(pinItem, id);
 
         // добавление элемента в фрагмент
         fragment.appendChild(pinsElement);
@@ -31,20 +31,33 @@
       // добавление фрагмента в разметку
       window.util.mapPins.appendChild(fragment);
 
-      // добавление обработчиков клика на пины
-      renderPins.forEach(function (pinsElementItem, i) {
-        pinsElementItem.addEventListener('click', function () {
-          onPinClickHandler(pins[i]);
-        });
-        pinsElementItem.addEventListener('keydown', function (evt) {
-          if (evt.keyCode === 13) {
-            onPinClickHandler(pins[i]);
-          }
-        });
-      });
+      // // добавление обработчиков клика на пины
+      // renderPins.forEach(function (pinsElementItem, i) {
+      //   pinsElementItem.addEventListener('click', function () {
+      //     onPinClickHandler(pins[i]);
+      //   });
+      //   pinsElementItem.addEventListener('keydown', function (evt) {
+      //     if (evt.keyCode === 13) {
+      //       onPinClickHandler(pins[i]);
+      //     }
+      //   });
+      // });
 
-      // отрисовка карточки при загрузке страницы для первого элемента
-      window.card.renderCard(pins[0]);
+      // добавление обработчика кликов на карте
+      window.util.mapPins.addEventListener('click', function (evt) {
+        var target = evt.target;
+        // всплытие события до элемента mapPins, чтобы клик внутри маркера(по фото) поднимался до маркера
+        while (target !== window.util.mapPins) {
+          // проверка соответствует ли target маркеру
+          if (target.classList.contains('map__pin--small')) {
+            // вызов обработчика, удаляющего старую карточку и создающего новую.
+            onPinClickHandler(pins[target.id]);
+            return;
+          }
+          // переход к родительскому target
+          target = target.parentNode;
+        }
+      });
     }
   };
 
