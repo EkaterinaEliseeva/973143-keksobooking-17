@@ -8,8 +8,10 @@
   var defaultAvatar = avatarPreview.src;
   var photoField = adForm.querySelector('.ad-form__input');
   var photoPreviewBlock = adForm.querySelector('.ad-form__photo');
+  var photoContainer = adForm.querySelector('.ad-form__photo-container');
   var fileAvatar;
   var filePhoto;
+  var photoItem = false;
 
   var checkType = function (file) {
     var fileName = file.name.toLowerCase();
@@ -24,13 +26,18 @@
   };
 
   var clearPhotos = function () {
-    var photos = photoPreviewBlock.querySelectorAll('img');
-    if (photos) {
-      photos = Array.from(photos);
-      photos.forEach(function (photo) {
-        photo.remove();
-      });
-    }
+    var photoBlocks = photoContainer.querySelectorAll('.ad-form__photo');
+    photoBlocks.forEach(function (photoBlock, item) {
+      var photo = photoBlock.querySelector('img');
+      if (photo) {
+        if (item > 0) {
+          photo.remove();
+          photoBlock.remove();
+        } else {
+          photo.remove();
+        }
+      }
+    });
   };
 
   var uploadPreview = function (file, filePreview) {
@@ -55,20 +62,26 @@
   // добавление обработчика для загрузки фотографий
   photoField.addEventListener('change', function () {
     filePhoto = photoField.files[0];
+    if (!photoItem) {
+      var photoPreview = document.createElement('img');
 
-    var photoPreview = document.createElement('img');
+      photoPreview.setAttribute('width', 'auto');
+      photoPreview.setAttribute('height', 'auto');
+      photoPreview.style.maxWidth = '100%';
+      photoPreview.style.maxHeight = '100%';
 
-    photoPreview.setAttribute('width', 'auto');
-    photoPreview.setAttribute('height', 'auto');
-    photoPreview.style.maxWidth = '100%';
-    photoPreview.style.maxHeight = '100%';
 
-    photoPreviewBlock.appendChild(photoPreview);
+      photoPreviewBlock.appendChild(photoPreview);
+      photoItem = true;
+    } else {
+      var newPhotoPreviewBlock = photoPreviewBlock.cloneNode(true);
+      photoContainer.appendChild(newPhotoPreviewBlock);
+      photoPreview = newPhotoPreviewBlock.querySelector('img');
+    }
 
     if (filePhoto && checkType(filePhoto)) {
       uploadPreview(filePhoto, photoPreview);
     }
-
   });
 
   window.photos = {
