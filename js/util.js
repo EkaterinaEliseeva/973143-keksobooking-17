@@ -19,6 +19,13 @@
     y: pinMain.offsetTop
   };
 
+  // удаление списка
+  var deleteList = function (list) {
+    list.forEach(function (listItem) {
+      listItem.remove();
+    });
+  };
+
   window.util = {
     PIN_HEIGHT: PIN_HEIGHT,
     PIN_WIDTH: PIN_WIDTH,
@@ -32,6 +39,7 @@
     adForm: adForm,
     mapPins: mapPins,
     mainBlock: mainBlock,
-    pinMainStartAddress: pinMainStartAddress
+    pinMainStartAddress: pinMainStartAddress,
+    deleteList: deleteList
   };
 })();

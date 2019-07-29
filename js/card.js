@@ -26,13 +26,6 @@
   var closeButton = card.querySelector('.popup__close');
   var featuresBlock = card.querySelector('.popup__features');
 
-  // удаление списка
-  var deleteList = function (list) {
-    list.forEach(function (listItem) {
-      listItem.remove();
-    });
-  };
-
   // создание элемента из списка удобств
   var createFeature = function (feature) {
     var featureItem = document.createElement('li');
@@ -44,7 +37,7 @@
   var createFeaturesList = function (features) {
     var featuresList = card.querySelectorAll('.popup__feature');
     if (featuresList) {
-      deleteList(featuresList);
+      window.util.deleteList(featuresList);
     }
     features.forEach(function (feature) {
       cardFeatures.appendChild(createFeature(feature));
@@ -62,7 +55,7 @@
   var createPhotoGallery = function (photos) {
     var photoGallery = cardPhotos.querySelectorAll('.popup__photo');
     if (photoGallery) {
-      deleteList(photoGallery);
+      window.util.deleteList(photoGallery);
     }
     photos.forEach(function (srcPhoto) {
       cardPhotos.appendChild(createPhotoItem(srcPhoto));

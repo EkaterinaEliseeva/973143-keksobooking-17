@@ -70,9 +70,9 @@
 
     var mapPins = document.querySelectorAll('.map__pin--small');
 
-    mapPins.forEach(function (mapPinItem) {
-      mapPinItem.remove();
-    });
+    if (mapPins) {
+      window.util.deleteList(mapPins);
+    }
   };
 
   window.map = {
