@@ -115,6 +115,10 @@
       window.util.adForm.classList.add('ad-form--disabled');
     }
 
+    // удаление аватара и фоторгафий
+    window.photos.clearAvatar();
+    window.photos.clearPhotos();
+
     isActivePage = false;
   };
 
