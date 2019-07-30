@@ -69,11 +69,7 @@
 
   // фильтрация по удобствам
   var filterByFeatures = function (inputFeature, features) {
-    if (inputFeature.checked && features.indexOf(inputFeature.value) === -1) {
-      return false;
-    } else {
-      return true;
-    }
+    return !(inputFeature.checked && features.indexOf(inputFeature.value) === -1);
   };
 
   filters.addEventListener('change', function () {

@@ -96,7 +96,7 @@
 
   // создание карточки
   var renderCard = function (pinsItem) {
-    if (isOffer) {
+    if (isOffer(pinsItem)) {
       var offer = pinsItem.offer;
       // добавление названия предложения
       cardTitle.textContent = offer.title;

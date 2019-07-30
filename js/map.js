@@ -33,7 +33,7 @@
     var fragment = document.createDocumentFragment();
 
     // массив отрисованных пинов
-    var renderPins = [];
+    var renderPins;
 
     if (pins.length !== 0) {
       pins

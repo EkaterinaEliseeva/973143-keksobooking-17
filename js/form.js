@@ -111,9 +111,10 @@
 
   // отключение элементов формы объявления
   var disableFormAd = function () {
-    for (var i = 0; i < adFieldsInput.length; i++) {
-      adFieldsInput[i].setAttribute('disabled', 'disabled');
-    }
+    adFieldsInput.forEach(function (adFieldInput) {
+      adFieldInput.setAttribute('disabled', 'disabled');
+    });
+
     // удаление обработчика отправки формы
     adForm.removeEventListener('submit', onSubmitButtonClick);
 
@@ -137,9 +138,9 @@
 
   // включение элементов формы объявления
   var activateFormAd = function () {
-    for (var i = 0; i < adFieldsInput.length; i++) {
-      adFieldsInput[i].disabled = false;
-    }
+    adFieldsInput.forEach(function (adFieldInput) {
+      adFieldInput.disabled = false;
+    });
 
     // добавление обработчика отправки формы
     adForm.addEventListener('submit', onSubmitButtonClick);
@@ -164,16 +165,16 @@
 
   // отключение элементов фильтра
   var disableFormFilter = function () {
-    for (var i = 0; i < filterFieldsInput.length; i++) {
-      filterFieldsInput[i].setAttribute('disabled', 'disabled');
-    }
+    filterFieldsInput.forEach(function (filterFieldInput) {
+      filterFieldInput.setAttribute('disabled', 'disabled');
+    });
   };
 
   // включение элементов фильтра
   var activateFormFilter = function () {
-    for (var i = 0; i < filterFieldsInput.length; i++) {
-      filterFieldsInput[i].disabled = false;
-    }
+    filterFieldsInput.forEach(function(filterFieldInput) {
+      filterFieldInput.disabled = false;
+    });
   };
 
   // установка начального значения адреса
