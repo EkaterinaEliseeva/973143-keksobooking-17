@@ -17,7 +17,7 @@
         window.card.deleteCard();
 
         // добавление новой карточки
-        window.card.renderCard(pins[target.getAttribute('data-id')]);
+        window.card.renderCard(pins[target.dataset.idDataPins]);
 
         return;
       }

@@ -18,7 +18,7 @@
     pinElem.classList.add('map__pin--small');
 
     // добавление id, соответствующего id в массиве данных о предложении для отлавливания событий и отрисовки карточки
-    pinElem.setAttribute('data-id', id);
+    pinElem.dataset.idDataPins = id;
     return pinElem;
   };
 

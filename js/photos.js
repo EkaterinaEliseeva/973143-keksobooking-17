@@ -2,6 +2,8 @@
 (function () {
   var adForm = window.util.adForm;
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var PREVIEW_WIDTH = '100%';
+  var PREVIEW_HEIGHT = '100%';
 
   var avatarField = adForm.querySelector('.ad-form-header__input');
   var avatarPreview = adForm.querySelector('.ad-form-header__preview').querySelector('img');
@@ -65,11 +67,8 @@
     if (!photoItem) {
       var photoPreview = document.createElement('img');
 
-      photoPreview.setAttribute('width', 'auto');
-      photoPreview.setAttribute('height', 'auto');
-      photoPreview.style.maxWidth = '100%';
-      photoPreview.style.maxHeight = '100%';
-
+      photoPreview.setAttribute('width', PREVIEW_WIDTH);
+      photoPreview.setAttribute('height', PREVIEW_HEIGHT);
 
       photoPreviewBlock.appendChild(photoPreview);
       photoItem = true;

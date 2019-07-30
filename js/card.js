@@ -71,9 +71,9 @@
   };
 
   // закрытие карточки по клику на кнопку
-  var onСloseButtonСlick = function () {
+  var onCloseButtonClick = function () {
     deleteCard();
-    closeButton.removeEventListener('click', onСloseButtonСlick);
+    closeButton.removeEventListener('click', onCloseButtonClick);
   };
 
   // закрытие карточки по нажатию esc
@@ -86,7 +86,7 @@
 
   // проверяет имеет ли объект свойство offer
   var isOffer = function (pinsItem) {
-    return pinsItem.offer ? true : false;
+    return !!pinsItem.offer;
   };
 
   // скрывает блок в карточке, если его нет
@@ -144,7 +144,7 @@
       map.insertBefore(card, mapFiltersBlock);
 
       // добавление обработчика клика на кнопку закрытия
-      closeButton.addEventListener('click', onСloseButtonСlick);
+      closeButton.addEventListener('click', onCloseButtonClick);
 
       // добавлвение обработчика клика на esc
       document.addEventListener('keydown', escButtonPress);
