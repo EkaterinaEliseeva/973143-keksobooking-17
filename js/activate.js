@@ -68,9 +68,6 @@
   // активация страницы
   var activatePage = function () {
     if (!isActivePage) {
-      // временно для проверки отправки
-      document.querySelector('#title').value = '123456789123456789123456789123';
-      document.querySelector('#price').value = '1000';
 
       // загрузка данных с сервера
       window.load.load(onSuccess, onError);
