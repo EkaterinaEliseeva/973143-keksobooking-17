@@ -1,22 +1,77 @@
 'use strict';
 (function () {
-  // добавление меток на карту
-  var addTagsToMap = function (pins) {
-    var fragment = document.createDocumentFragment();
-    pins
-    .slice(0, 5)
-    .forEach(function (pinItem) {
-      fragment.appendChild(window.pin.renderPin(pinItem));
-    });
-    window.util.mapPins.appendChild(fragment);
+
+  // обработка кликов на метках
+  var mapClickHandler = function (pins, target) {
+
+    // всплытие события до элемента mapPins, чтобы клик внутри метки(по фото) поднимался до метки
+    while (target !== window.util.mapPins) {
+
+      // проверка соответствует ли target метке
+      if (target.classList.contains('map__pin--small')) {
+
+        // добавление класса active метке
+        target.classList.add('.map__pin--active');
+
+        // удаление старой карточки
+        window.card.deleteCard();
+
+        // добавление новой карточки
+        window.card.renderCard(pins[target.dataset.idDataPins]);
+
+        return;
+      }
+
+      // переход к родительскому target
+      target = target.parentNode;
+    }
   };
 
-  var deleteTagsFromMap = function () {
-    var mapPins = document.querySelectorAll('.map__pin--small');
-    mapPins.forEach(function (mapPinItem) {
-      mapPinItem.remove();
-    });
+  // добавление меток на карту
+  var addTagsToMap = function (pins) {
 
+    var fragment = document.createDocumentFragment();
+
+    // массив отрисованных пинов
+    var renderPins = [];
+
+    if (pins.length !== 0) {
+      pins
+      .slice(0, window.util.MAX_PINS)
+      .forEach(function (pinItem, id) {
+
+        // рендер элемента
+        var pinsElement = window.pin.renderPin(pinItem, id);
+
+        // добавление элемента в фрагмент
+        fragment.appendChild(pinsElement);
+
+        // добавление элемента в массив отрисованных
+        renderPins.push(pinsElement);
+      });
+
+      // добавление фрагмента в разметку
+      window.util.mapPins.appendChild(fragment);
+
+      // добавление обработчика кликов на карте
+      window.util.mapPins.addEventListener('click', function (evt) {
+
+        // вызов функции-обработчика и передача массива данных об отрисованных пинах, и target события
+        mapClickHandler(pins, evt.target);
+
+      });
+    }
+
+  };
+
+  // удаление меток с карты
+  var deleteTagsFromMap = function () {
+
+    var mapPins = document.querySelectorAll('.map__pin--small');
+
+    if (mapPins) {
+      window.util.deleteList(mapPins);
+    }
   };
 
   window.map = {
