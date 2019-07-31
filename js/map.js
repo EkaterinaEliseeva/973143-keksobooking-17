@@ -33,7 +33,7 @@
     var fragment = document.createDocumentFragment();
 
     // массив отрисованных пинов
-    var renderPins;
+    var renderPins = [];
 
     if (pins.length !== 0) {
       pins
@@ -56,9 +56,8 @@
       // добавление обработчика кликов на карте
       window.util.mapPins.addEventListener('click', function (evt) {
 
-        var target = evt.target;
-
-        mapClickHandler(pins, target);
+        // вызов функции-обработчика и передача массива данных об отрисованных пинах, и target события
+        mapClickHandler(pins, evt.target);
 
       });
     }
