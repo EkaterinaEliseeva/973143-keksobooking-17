@@ -172,7 +172,7 @@
 
   // включение элементов фильтра
   var activateFormFilter = function () {
-    filterFieldsInput.forEach(function(filterFieldInput) {
+    filterFieldsInput.forEach(function (filterFieldInput) {
       filterFieldInput.disabled = false;
     });
   };
