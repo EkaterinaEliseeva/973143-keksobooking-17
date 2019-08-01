@@ -2,6 +2,7 @@
 (function () {
   var URL_LOAD = 'https://js.dump.academy/keksobooking/data';
   var URL_UPLOAD = 'https://js.dump.academy/keksobooking';
+  var STATUS_SUCCESS = 200;
   var TIMEOUT = 10000;
 
   // функция загрузки данных с сервера
@@ -11,7 +12,7 @@
 
     // добавление обработчика события load
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === STATUS_SUCCESS) {
         onSuccess(xhr.response);
       } else {
         onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
@@ -43,7 +44,7 @@
 
     // добавление обработчика события load
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === STATUS_SUCCESS) {
         onSuccess(xhr.response);
       } else {
         onError('Ошибка отправки объявления. Статус ответа: ' + xhr.status + ' ' + xhr.statusText);

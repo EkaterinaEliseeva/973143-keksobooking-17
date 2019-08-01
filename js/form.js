@@ -209,12 +209,12 @@
   // удаление окна успешной отправки
   var removeSuccessModal = function () {
     successModal.remove();
-    document.removeEventListener('click', onSuccessClickHanler);
+    document.removeEventListener('click', onSuccessClickHandler);
     document.removeEventListener('keydown', onSuccessEscButtonPress);
   };
 
   // обработчик клика на странице, удаляющий окно об успешной отправке
-  var onSuccessClickHanler = function (evt) {
+  var onSuccessClickHandler = function (evt) {
     evt.preventDefault();
     removeSuccessModal();
   };
@@ -242,7 +242,7 @@
     successModal = successTemplate.cloneNode(true);
 
     // добавление обработчиков закрытия попапа
-    document.addEventListener('click', onSuccessClickHanler);
+    document.addEventListener('click', onSuccessClickHandler);
     document.addEventListener('keydown', onSuccessEscButtonPress);
 
     // добавление сообщения в разметку
